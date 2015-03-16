@@ -1,0 +1,474 @@
+@media screen and (max-width: 980px) {
+
+	/************************************************************************************
+	STRUCTURE
+	*************************************************************************************/
+	.pagewidth,
+	.sidebar-none .loops-wrapper.list-post .section-inner,
+	.single .section-inner {
+		max-width: 94%;
+	}
+	.full_width.sidebar-none .loops-wrapper .section-inner {
+		max-width: 100% !important;
+	}
+	#header.pagewidth {
+		max-width: 100%;
+		width: 100%;
+	}
+	
+	/* IE navigation fix */
+	.pagewidth #nav-bar {
+		padding: 0 3% \9;
+		left: -3% \9;
+	}		
+		
+	/* content */
+	#content {
+		padding: 7% 0 5%;
+		width: 67.8%;
+	}
+	
+	/* sidebar */
+	#sidebar {
+		padding: 7% 0 5%;
+		width: 26.2%;
+	}
+	#sidebar .secondary {
+		width: 47.4%;
+	}
+	
+	/************************************************************************************
+	SECTION
+	*************************************************************************************/
+	/* section video */
+	.section-post.video {
+		min-height: 0;
+	}
+		
+}
+
+
+@media screen and (max-width: 830px) {
+
+	/************************************************************************************
+	HIGHTLIGH POST TYPE
+	*************************************************************************************/
+	/* grid4 */
+	.loops-wrapper.highlight.grid4 .post {
+		width: auto;
+		margin-left: 0;
+		float: none;
+	}
+}
+
+@media screen and (max-width: 760px) {
+
+	/************************************************************************************
+	STRUCTURE
+	*************************************************************************************/
+	#content {
+		width: 100%;
+		max-width: 100%;
+		float: none;
+		clear: both;
+	}
+	
+	/* sidebar */
+	#sidebar {
+		width: 100%;
+		max-width: 100%;
+		float: none;
+		clear: both;
+	}
+	
+	/************************************************************************************
+	HEADER
+	*************************************************************************************/
+	/* reset absolute elements to static */
+	#header .social-widget, 
+	#site-logo, 
+	#site-description  {
+		position: static !important;
+		float: none;
+		clear: both;
+	}
+	
+	#headerwrap #site-logo {
+		font-size: 2.8em;
+	}
+.titletop {
+margin: 0 15px 0 15px;
+color: #cccc00;
+font-size: 1em;
+text-align: left;
+font-weight: bold;
+line-height: 1.2;
+}
+			
+	/************************************************************************************
+	MOBILE NAV BUTTON
+	*************************************************************************************/
+	.mobile-button {
+		position: relative;
+		height: 20px;
+		margin: auto;
+		display: inline-block;
+		cursor: pointer;
+		padding: 20px 0;
+		white-space: nowrap;
+		text-align: left;
+	}
+	.mobile-button:after {
+		padding: 1px;
+		content: "";
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: -1px;
+		left: -1px;
+		z-index: -1;
+	}
+	.mobile-button {
+		color: #000;
+		text-transform: uppercase;
+	}
+
+	/************************************************************************************
+	MAIN NAV (MOBILE)
+	*************************************************************************************/
+	#headerwrap #main-nav-wrap {
+		position: absolute;
+		top: 5px;
+		right: 95px;
+		z-index: 1000;
+	}
+	
+	/* menu icon */
+	#menu-icon:before {
+		content: "\f0c9";
+		font: normal 21px/1em FontAwesome;
+		width: 1em;
+		height: 1em;
+		vertical-align: middle;
+		display: inline-block;
+		margin: -4px 5px 0 0;
+	}
+	
+	/* main nav */
+	#headerwrap #main-nav {
+		clear: both;
+		position: absolute;
+		width: 180px;
+		z-index: 1000;
+		padding: 10px 12px;
+		background: #fff;
+		display: none;
+		left: 50%;
+		margin-left: -100px;
+		border: solid 1px #ccc;
+	}
+	#headerwrap #main-nav li {
+		clear: both;
+		float: none;
+		padding: 5px 0;
+		position: static;
+		display: block;
+		border-top: 1px solid #e5e5e5;
+	}
+	#headerwrap #main-nav li:first-child {
+		border: none;
+	}
+	#headerwrap #main-nav a, 
+	#headerwrap #main-nav ul a {
+		font: inherit;
+		font-size: .85em;
+		text-transform: inherit;
+		background: none;
+		width: auto;
+		display: block;
+		padding: 0;
+		color: #666;
+		border: none;
+	}
+	#headerwrap #main-nav a:hover, 
+	#headerwrap #main-nav ul a:hover {
+		background: none;
+		color: #000;
+	}
+	
+	/* dropdown */
+	#headerwrap #main-nav ul {
+		position: static;
+		display: block;
+		margin: 0;
+		padding: 0;
+		background: none;
+		border: none;
+	}
+	#headerwrap #main-nav ul ul {
+		margin: 0;
+		text-align: center;
+	}
+	#headerwrap #main-nav ul ul:before {
+		display: none;
+	}
+	
+	/* home navigation */
+	#headerwrap #main-nav {
+	    top: auto;
+	    bottom: auto;
+		max-height: 620px;
+		overflow: auto;
+z-index: 999;
+	}
+.fixed-header-on #headerwrap #main-nav { top: auto; bottom: auto; z-index: 99999; }
+	
+
+	/************************************************************************************
+	SECTION
+	*************************************************************************************/
+	/* section */
+	.section-inner {
+		padding-top: 100px; /* padding space for fixed header */
+	}
+	
+	/* section message content */
+	.section-post.message {
+		font-size: 1em;
+	}
+	
+	/************************************************************************************
+	POST
+	*************************************************************************************/
+	/* grid4 & grid3 */
+	.loops-wrapper.grid4 .post,
+	.loops-wrapper.grid3 .post {
+		width: auto;
+		margin-left: 0;
+		float: none;
+	}
+
+@media screen and (max-width: 760px) and (max-height: 600px) {
+
+	/* make fixed menu scroll on mobile */
+	#headerwrap #main-nav {
+		max-height: 320px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	
+	/************************************************************************************
+	LOOPS WRAPPER
+	*************************************************************************************/
+	.loops-wrapper {
+		margin-left: 0 !important;
+	}
+
+	/************************************************************************************
+	POST
+	*************************************************************************************/
+	.loops-wrapper.list-post .post-content {
+		overflow: visible;
+	}
+
+#menu-icon {
+display: block;
+}
+
+}
+
+@media screen and (max-width: 480px) {
+
+	/************************************************************************************
+	GRID
+	*************************************************************************************/
+	.col4-1,
+	.col4-2, .col2-1,
+	.col4-3,
+	.col3-1,
+	.col3-2	 {
+		margin-left: 0 !important;
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+
+	/************************************************************************************
+	HEADER
+	*************************************************************************************/
+	#headerwrap {
+		z-index: 998;
+height:180px;
+overflow: visible;
+	}
+
+	/* social widget */
+	.social-widget {
+		position: static;
+		float: none;
+		padding: 0;
+	}
+.titletop {
+margin: 0 15px 0 15px;
+color: #cccc00;
+font-size: .9em;
+text-align: left;
+font-weight: bold;
+line-height: 1.2;
+}
+.toplogin {
+display: none;
+}
+	/************************************************************************************
+	POST
+	*************************************************************************************/
+	/* post */
+	.post {
+		width: auto !important;
+		max-width: 100% !important;
+		margin-left: 0 !important;
+		float: none !important;
+	}
+
+	.single-portfolio-expanded .post-image,
+	.single-portfolio .post-image,
+	.loops-wrapper.list-post .post-image {
+		 max-width: 100%;
+		 width: 100%;
+		 float: none;
+		 margin-right: 0%;
+	}
+
+	/* grid2-thumb */
+	.loops-wrapper.grid2-thumb .post-image {
+		width: auto;
+		max-width: auto;
+		min-width: 0;
+	}
+	.loops-wrapper.grid2-thumb .post-content {
+		overflow: visible;
+	}
+
+	/************************************************************************************
+	SECTION
+	*************************************************************************************/
+	/* section title */
+	.section-title,
+	.section-post.message .section-title {
+		font-size: 2.2em;
+	}
+	.section-subhead,
+	.section-post.message .section-subhead {
+		font-size: 1.2em;
+	}
+	
+	/************************************************************************************
+	POST NAV
+	*************************************************************************************/
+	.post-nav .prev, 
+	.post-nav .next {
+		display: block;
+		width: 100%;
+		clear: both;
+		margin-bottom: 10px;
+	}
+	
+	/************************************************************************************
+	COMMENTS
+	*************************************************************************************/
+	.commentlist {
+		padding-left: 0;
+	}
+	.commentlist .commententry {
+		clear: left;
+	}
+	.commentlist ul,
+	.commentlist ol {
+		margin: 0 0 0 5%;
+	}
+	.commentlist .avatar {
+		float: left;
+		width: 40px;
+		height: 40px;
+		margin: 0 10px 10px 0;
+	}
+
+	/************************************************************************************
+	GALLERY
+	*************************************************************************************/
+	#body .gallery-columns-1 img {
+		max-width: 50px;
+		padding: 3px;
+	}
+
+	/************************************************************************************
+	FOOTER
+	*************************************************************************************/
+	#footer-logo {
+		position: static;
+	}
+	.footer-nav {
+		padding: 0;
+	}
+	#footer .widget {
+		margin: 0;
+	}
+
+	/************************************************************************************
+	WOOCOMMERCE SUPPORT
+	*************************************************************************************/
+	.woocommerce #content div.product div.images,
+	.woocommerce #content div.product div.summary {
+		float: none !important;
+		width: 100% !important;
+	}
+.team {
+width: 100%;
+margin: 0 30px 0 40px;
+float: left;
+}
+
+.team ul {
+	list-style: none;
+}
+
+.team .photo {
+margin-top: 20px;
+float: left;
+margin-right: 20px;
+}
+.team li {
+clear: both;
+}
+
+.team h4 {
+margin-left: 0;
+
+}
+
+.team p {
+margin-top: 10px;
+margin-left: 0;
+text-indent: 0;
+}
+
+.teamphotos {
+float: left;
+width: 40%;
+clear: none;
+margin-top: 30px;
+}
+
+}
+
+@media screen and (min-width: 761px) {
+
+	/* ensure #nav is visible on desktop version */
+	#main-nav {
+		display: block !important;
+	}
+	#menu-icon span {
+		display: none;
+	}
+
+}
