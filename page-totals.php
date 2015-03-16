@@ -130,7 +130,11 @@ global $themify; ?>
 
 			<?
 
-			$args = array('role' => 'pmpro_role_6');
+			$args = array(
+				'role' => 'pmpro_role_6',
+				'orderby' => 'meta_value',
+				'meta_key' => 'last_name',
+			);
 			// The Query
 			$user_query = new WP_User_Query( $args );
 			$nutrition = 0; $fitness = 0; $wellness = 0;
