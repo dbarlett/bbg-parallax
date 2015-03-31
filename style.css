@@ -130,7 +130,36 @@ h5 {
 h6 {
 	font-size: 1em;
 }
-
+/* FORM
+================================================ */
+/* form input */
+input, textarea, select, input[type=search], button {
+	font-size: 100%;
+	font-family: inherit;
+	border-radius: 0;
+}
+textarea, input[type=text], input[type=password], input[type=search], input[type=email], input[type=url] {
+	background: #fff;
+	border: 1px solid #c5c5c5;
+	padding: 6px 10px;
+	border-radius: 0;
+	box-shadow: nonr;
+	-webkit-appearance: none;
+}
+input[type=text], input[type=search], input[type=email], input[type=url] {
+	width: 240px;
+	max-width: 90%;
+}
+.gform_wrapper .gfield_checkbox li label,
+.gform_wrapper .gfield_radio li label {
+	display: block;
+	margin: 0 0 0 24px;
+	padding: 0;
+	width: auto;
+	line-height: 1.5;
+	vertical-align: top;
+	font-size:  20px;
+}
 /* CUSTOM CODE 
 =====================================*/
 
@@ -637,7 +666,8 @@ margin-right: 1%;
 font-weight: 700;
 }
 #input_4_7.medium.gfield_select, .gform_wrapper select {
-font-size: 14px!important;
+font-size: 20px!important;
+border-radius: 0!important;
 }
 .gform_wrapper .top_label .gfield_label {
 font-size: 1.3em!important;

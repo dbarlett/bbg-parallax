@@ -9,12 +9,12 @@ $end = date('Y-m-'.date('t'));
 
 
 // ### Redeclare the above 2 variables if you wish to apply a different range:
-// $start = '2015-02-09';
-// $end = '2015-02-28';
+// $start = '2015-05-04';
+// $end = '2015-05-30';
 
 # Suggested dynamic solution, it will assume the start date and add 45 days.
 # So in february it will cover up to feb 28
-$end = date('Y-m-d', strtotime($start)+19*DAY);
+$end = date('Y-m-d', strtotime($start)+27*DAY);
 
 // count how many days we'll show
 $days = (strtotime($end) - strtotime($start)) / DAY;
@@ -131,7 +131,7 @@ global $themify; ?>
 			<?
 
 			$args = array(
-				'role' => 'pmpro_role_6',
+				'role' => 'pmpro_role_7',
 				'orderby' => 'meta_value',
 				'meta_key' => 'last_name',
 			);
