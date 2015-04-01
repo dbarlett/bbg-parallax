@@ -148,7 +148,7 @@ if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 					<td><strong>Name</strong></td>
 					<td><strong>Totals</strong></td>
 					<?php for ( $i = 0; $i <= $months - 1 ; $i++ ): ?>
-						<td colspan="<?php echo date( 't', $d = strtotime( $start ) + $i * 31 * DAY ); ?>"><strong><?php echo date( 'F', $d ); ?></strong></td>
+						<td colspan="<?php echo esc_attr( date( 't', $d = strtotime( $start ) + $i * 31 * DAY ) ); ?>"><strong><?php echo esc_html( date( 'F', $d ) ); ?></strong></td>
 					<?php endfor; ?>
 				</tr>
 				</thead>
@@ -174,7 +174,7 @@ if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 						$day = date( 'd', $init += DAY );
 						?>
 						<td class="date">
-							<strong><?php echo $day; ?></strong>
+							<strong><?php echo (int) $day; ?></strong>
 							<table>
 								<tr class="point-container">
 									<td class="point-type type-n">N</td>
@@ -246,9 +246,9 @@ if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 								<td>
 									<table>
 										<tr>
-											<td class="score type-n"><?php echo $nutrition; ?></td>
-											<td class="score type-f"><?php echo $fitness;   ?></td>
-											<td class="score type-w"><?php echo $wellness;  ?></td>
+											<td class="score type-n"><?php echo (int) $nutrition; ?></td>
+											<td class="score type-f"><?php echo (int) $fitness;   ?></td>
+											<td class="score type-w"><?php echo (int) $wellness;  ?></td>
 										</tr>
 									</table>
 								</td>
