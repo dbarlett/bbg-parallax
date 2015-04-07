@@ -48,6 +48,7 @@ function bbg_gform_pre_render_3( $form ) {
 	$current_hour = current_time( 'H' );
 	if ( ( 0 <= $current_hour ) && ( $current_hour <= 14 ) ) {
 		// Between midnight and 3pm, enter points for previous day
+		// Subtract 16 hours to account for DST transitions
 		$yesterday = $current_timestamp - ( 60 * 60 * 16 );
 		$form['description'] = sprintf(
 			'Enter points for yesterday (%s)',
