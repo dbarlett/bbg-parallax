@@ -35,3 +35,44 @@ function acf_post_submission( $entry, $form ) {
 	error_log( print_r( $value, 1 ), 3, '/tmp/my-errors.log' );
 	update_field( $field_key, $value, $user_id );
 }
+
+/**
+ * Limit entries for form #3
+ * http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_pre_render/
+ */
+add_filter( 'gform_pre_render_3', 'bbg_gform_pre_render_3', 10, 1 );
+function bbg_gform_pre_render_3( $form ) {
+	$current_timestamp = current_time( 'timestamp' );
+	$current_hour = current_time( 'H' );
+	if ( ( 0 <= $current_hour ) && ( $current_hour <= 14 ) ) {
+		$yesterday = $current_timestamp - ( 60 * 60 * 16 );
+		$form['description'] = sprintf(
+			'Enter points for yesterday (%s)',
+			date( 'l n/j', $yesterday )
+		);
+		foreach ( $form['fields'] as &$field ) {
+			if ( 2 == $field->id ) {
+				$field->defaultValue = date( 'Y-m-d', $yesterday );
+			}
+		}
+	} elseif ( ( 20 <= $current_hour ) && ( $current_hour <= 23 ) ) {
+		$form['fields'][2]['defaultValue'] = date( 'Y-m-d', $current_timestamp );
+		$form['description'] = sprintf(
+			'Enter points for today (%s)',
+			date( 'l n/j', $current_timestamp )
+		);
+		foreach ( $form['fields'] as &$field ) {
+			if ( 2 == $field->id ) {
+				$field->defaultValue = date( 'Y-m-d', $current_timestamp );
+			}
+		}
+	} else {
+		$form['scheduleForm'] = true;
+		$form['scheduleStart'] = date( 'm/d/Y', $current_timestamp );
+		$form['scheduleStartHour'] = 20;
+		$form['scheduleStartMinute'] = 0;
+		$form['scheduleStartAmpm'] = 'pm';
+		$form['scheduleMessage'] = 'You may enter points for today starting at 8pm';
+	}
+	return $form;
+}
