@@ -72,11 +72,11 @@ function bbg_gform_pre_render_3( $form ) {
 		}
 	} else {
 		// Between 3pm and 8pm, close form as if it were scheduled
-		$form['scheduleForm'] = true;
-		$form['scheduleStart'] = date( 'm/d/Y', $current_timestamp );
-		$form['scheduleStartHour'] = 8;
-		$form['scheduleStartMinute'] = 0;
-		$form['scheduleStartAmpm'] = 'pm';
+		$form['scheduleForm']           = true;
+		$form['scheduleStart']          = date( 'm/d/Y', $current_timestamp );
+		$form['scheduleStartHour']      = 8;
+		$form['scheduleStartMinute']    = 0;
+		$form['scheduleStartAmpm']      = 'pm';
 		$form['schedulePendingMessage'] = 'You may enter points for today starting at 8pm';
 	}
 	return $form;
