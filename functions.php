@@ -69,10 +69,10 @@ function bbg_gform_pre_render_3( $form ) {
 	} else {
 		$form['scheduleForm'] = true;
 		$form['scheduleStart'] = date( 'm/d/Y', $current_timestamp );
-		$form['scheduleStartHour'] = 20;
+		$form['scheduleStartHour'] = 8;
 		$form['scheduleStartMinute'] = 0;
 		$form['scheduleStartAmpm'] = 'pm';
-		$form['scheduleMessage'] = 'You may enter points for today starting at 8pm';
+		$form['schedulePendingMessage'] = 'You may enter points for today starting at 8pm';
 	}
 	return $form;
 }
