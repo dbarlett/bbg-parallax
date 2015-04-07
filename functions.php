@@ -16,7 +16,7 @@ function custom_enqueue_scripts() {
 }
 
 add_action( 'gform_after_submission_3', 'acf_post_submission', 10, 2 );
-function acf_post_submission($entry, $form ) {
+function acf_post_submission( $entry, $form ) {
 	$field_key = 'field_54817fefd7196';
 	$user_id = 'user_' . get_current_user_id();
 	$value = array();
