@@ -38,13 +38,16 @@ function acf_post_submission( $entry, $form ) {
 
 /**
  * Limit entries for form #3
- * http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_pre_render/
+ * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_pre_render/
+ * @author Dylan Barlett <dylan.barlett@gmail.com>
  */
 add_filter( 'gform_pre_render_3', 'bbg_gform_pre_render_3', 10, 1 );
 function bbg_gform_pre_render_3( $form ) {
+	// Local time based on blog timezone
 	$current_timestamp = current_time( 'timestamp' );
 	$current_hour = current_time( 'H' );
 	if ( ( 0 <= $current_hour ) && ( $current_hour <= 14 ) ) {
+		// Between midnight and 3pm, enter points for previous day
 		$yesterday = $current_timestamp - ( 60 * 60 * 16 );
 		$form['description'] = sprintf(
 			'Enter points for yesterday (%s)',
@@ -56,6 +59,7 @@ function bbg_gform_pre_render_3( $form ) {
 			}
 		}
 	} elseif ( ( 20 <= $current_hour ) && ( $current_hour <= 23 ) ) {
+		// Between 8pm and midnight, enter points for current day
 		$form['fields'][2]['defaultValue'] = date( 'Y-m-d', $current_timestamp );
 		$form['description'] = sprintf(
 			'Enter points for today (%s)',
@@ -67,6 +71,7 @@ function bbg_gform_pre_render_3( $form ) {
 			}
 		}
 	} else {
+		// Between 3pm and 8pm, close form as if it were scheduled
 		$form['scheduleForm'] = true;
 		$form['scheduleStart'] = date( 'm/d/Y', $current_timestamp );
 		$form['scheduleStartHour'] = 8;
