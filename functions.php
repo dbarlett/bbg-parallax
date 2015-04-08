@@ -20,13 +20,13 @@ function acf_post_submission( $entry, $form ) {
 	$field_key = 'field_54817fefd7196';
 	$user_id = 'user_' . get_current_user_id();
 	$value = array();
-	$value += get_field( $field_key, $user_id );
+	$value[] = get_field( $field_key, $user_id );
 	// fix the date format, no hyphen!
 	foreach ( $value as $key => &$val ) {
 		$val['date'] = str_replace( '-', '', $val['date'] );
 	}
 	$value[] = array(
-		'date'                          => date( 'Ymd', strtotime( $entry[2] ) ),
+		'date'						  => date( 'Ymd', strtotime( $entry[2] ) ),
 		'total_nutrition_points_earned' => $entry[6],
 		'total_fitness_points_earned'   => $entry[7],
 		'total_wellness_points_earned'  => $entry[8],
@@ -49,11 +49,11 @@ function bbg_gform_pre_render_3( $form ) {
 
 	if ( ( 15 <= $current_hour ) && ( $current_hour <= 19 ) ) {
 		// Between 3pm and 8pm, close form as if it were scheduled
-		$form['scheduleForm']           = true;
-		$form['scheduleStart']          = date( 'm/d/Y', $current_timestamp );
-		$form['scheduleStartHour']      = 8;
-		$form['scheduleStartMinute']    = 0;
-		$form['scheduleStartAmpm']      = 'pm';
+		$form['scheduleForm']		   = true;
+		$form['scheduleStart']		  = date( 'm/d/Y', $current_timestamp );
+		$form['scheduleStartHour']	  = 8;
+		$form['scheduleStartMinute']	= 0;
+		$form['scheduleStartAmpm']	  = 'pm';
 		$form['schedulePendingMessage'] = 'You may enter points for today starting at 8pm';
 	} else {
 		// At all other times, form is open
@@ -69,24 +69,24 @@ function bbg_gform_pre_render_3( $form ) {
 		}
 		// Find existing active entries by the current user for the current time period
 		$search_criteria = array(
-			'status'        => 'active',
+			'status'		=> 'active',
 			'field_filters' => array(
 				'mode' => 'all',
 				array(
-					'key'      => 'created_by',
-					'value'    => get_current_user_id(),
+					'key'	  => 'created_by',
+					'value'	=> get_current_user_id(),
 				),
 				array(
-					'key'      => '2',
+					'key'	  => '2',
 					'operator' => 'is',
-					'value'    => date( 'Y-m-d', $entry_for ),
+					'value'	=> date( 'Y-m-d', $entry_for ),
 				),
 			),
 		);
 		$entries = GFAPI::get_entries( 3, $search_criteria );
 		if ( ! is_wp_error( $entries ) && ( count( $entries ) > 0 ) ) {
 			// Close form as if the total entry limit had been reached
-			$form['limitEntries']        = true;
+			$form['limitEntries']		= true;
 			$form['limitEntriesCount']   = 1;
 			$form['limitEntriesMessage'] = sprintf(
 				'You have already entered points for %s.',
@@ -105,4 +105,37 @@ function bbg_gform_pre_render_3( $form ) {
 		}
 	}
 	return $form;
+}
+
+/**
+ * Validate field 2 on form #3
+ * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_field_validation/
+ * @author Dylan Barlett <dylan.barlett@gmail.com>
+ */
+add_filter( 'gform_field_validation_3_2', 'bbg_validate_points_date_3_2', 10, 4 );
+function bbg_validate_points_date_3_2( $result, $value, $form, $field ) {
+	if ( $result['is_valid'] ) {
+		// Find existing active entries by the current user for the submitted date
+		$search_criteria = array(
+			'status'        => 'active',
+			'field_filters' => array(
+				'mode' => 'all',
+				array(
+					'key'      => 'created_by',
+					'value'	   => get_current_user_id(),
+				),
+				array(
+					'key'      => '2',
+					'operator' => 'is',
+					'value'	   => $value,
+				),
+			),
+		);
+		$entries = GFAPI::get_entries( 3, $search_criteria );
+		if ( ! is_wp_error( $entries ) && ( count( $entries ) > 0 ) ) {
+			$result['is_valid'] = false;
+			$result['message']  = 'You have already entered points for this day.';
+		}
+	}
+	return $result;
 }
