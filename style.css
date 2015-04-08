@@ -688,6 +688,9 @@ border-radius: 0!important;
 border: none!important;
 background-image: none!important;
 }
+.hidden {
+display: none;
+}
 /* form input:hover */
 input[type=reset]:hover, input[type=submit]:hover, button:hover {
 	background: #669999!important;
