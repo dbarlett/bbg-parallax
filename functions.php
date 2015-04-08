@@ -46,32 +46,8 @@ function bbg_gform_pre_render_3( $form ) {
 	// Local time based on blog timezone
 	$current_timestamp = current_time( 'timestamp' );
 	$current_hour = current_time( 'H' );
-	if ( ( 0 <= $current_hour ) && ( $current_hour <= 14 ) ) {
-		// Between midnight and 3pm, enter points for previous day
-		// Subtract 16 hours to account for DST transitions
-		$yesterday = $current_timestamp - ( 60 * 60 * 16 );
-		$form['description'] = sprintf(
-			'Enter points for yesterday (%s)',
-			date( 'l n/j', $yesterday )
-		);
-		foreach ( $form['fields'] as &$field ) {
-			if ( 2 == $field->id ) {
-				$field->defaultValue = date( 'Y-m-d', $yesterday );
-			}
-		}
-	} elseif ( ( 20 <= $current_hour ) && ( $current_hour <= 23 ) ) {
-		// Between 8pm and midnight, enter points for current day
-		$form['fields'][2]['defaultValue'] = date( 'Y-m-d', $current_timestamp );
-		$form['description'] = sprintf(
-			'Enter points for today (%s)',
-			date( 'l n/j', $current_timestamp )
-		);
-		foreach ( $form['fields'] as &$field ) {
-			if ( 2 == $field->id ) {
-				$field->defaultValue = date( 'Y-m-d', $current_timestamp );
-			}
-		}
-	} else {
+
+	if ( ( 15 <= $current_hour ) && ( $current_hour <= 19 ) ) {
 		// Between 3pm and 8pm, close form as if it were scheduled
 		$form['scheduleForm']           = true;
 		$form['scheduleStart']          = date( 'm/d/Y', $current_timestamp );
@@ -79,6 +55,54 @@ function bbg_gform_pre_render_3( $form ) {
 		$form['scheduleStartMinute']    = 0;
 		$form['scheduleStartAmpm']      = 'pm';
 		$form['schedulePendingMessage'] = 'You may enter points for today starting at 8pm';
+	} else {
+		// At all other times, form is open
+		if ( ( 0 <= $current_hour ) && ( $current_hour <= 14 ) ) {
+			// Between midnight and 3pm, enter points for previous day
+			// Subtract 16 hours to account for DST transitions
+			$entry_for = $current_timestamp - ( 60 * 60 * 16 );
+			$description = 'Enter points for yesterday (%s)';
+		} else {
+			// Between 8pm and midnight, enter points for current day
+			$entry_for = $current_timestamp;
+			$description = 'Enter points for today (%s)';
+		}
+		// Find existing active entries by the current user for the current time period
+		$search_criteria = array(
+			'status'        => 'active',
+			'field_filters' => array(
+				'mode' => 'all',
+				array(
+					'key'      => 'created_by',
+					'value'    => get_current_user_id(),
+				),
+				array(
+					'key'      => '2',
+					'operator' => 'is',
+					'value'    => date( 'Y-m-d', $entry_for ),
+				),
+			),
+		);
+		$entries = GFAPI::get_entries( 3, $search_criteria );
+		if ( ! is_wp_error( $entries ) && ( count( $entries ) > 0 ) ) {
+			// Close form as if the total entry limit had been reached
+			$form['limitEntries']        = true;
+			$form['limitEntriesCount']   = 1;
+			$form['limitEntriesMessage'] = sprintf(
+				'You have already entered points for %s.',
+				date( 'l n/j', $entry_for )
+			);
+		} else {
+			$form['description'] = sprintf(
+				$description,
+				date( 'l n/j', $entry_for )
+			);
+			foreach ( $form['fields'] as &$field ) {
+				if ( 2 == $field->id ) {
+					$field->defaultValue = date( 'Y-m-d', $entry_for );
+				}
+			}
+		}
 	}
 	return $form;
 }
