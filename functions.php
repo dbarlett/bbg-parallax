@@ -117,6 +117,58 @@ function bbg_validate_points_date_3_2( $result, $value, $form, $field ) {
 		}
 	}
 	return $result;
+}
+
+/**
+ * Award bonus points for Total Wellness Challenge (form #3)
+ * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/actions/gform_pre_submission/
+ * @author Dylan Barlett <dylan.barlett@gmail.com>
+ */
+add_filter( 'gform_pre_submission_3', 'bbg_gform_pre_submission_3', 10, 1 );
+function bbg_gform_pre_submission_3( $form ) {
+	// Field 6 (Nutrition Points)
+	if ( 12 == rgpost( 'input_6' ) ) {
+		$points_date = rgpost( 'input_2' ); // Y-m-d
+		$last_four_days = array();
+		for ( $i = 1; $i <= 4; $i++ ) {
+			$past_date = new DateTime( $points_date );
+			$last_four_days[] = $past_date->sub( new DateInterval( 'P' . $i . 'D' ) )->format( 'Y-m-d' );
+		}
+		$search_criteria = array(
+			'status'		=> 'active',
+			'field_filters' => array(
+				'mode' => 'all',
+				array(
+					'key'   => 'created_by',
+					'value'	=> get_current_user_id(),
+				),
+				array(
+					'key'      => '2', // points date (Y-m-d)
+					'operator' => 'in',
+					'value'	   => $last_four_days,
+				),
+				array(
+					'key'      => '6', // nutrition points
+					'operator' => 'is',
+					'value'	   => '12',
+				),
+			),
+		);
+		$sorting = array(
+			'key'       => '2', // points date (Y-m-d)
+			'direction' => 'DESC',
+		);
+		$paging = array(
+			'offset'    => 0,
+			'page_size' => 4,
+		);
+		$entries = GFAPI::get_entries( 3, $search_criteria, $sorting, $paging );
+		if ( ! is_wp_error( $entries ) && ( 4 == count( $entries ) ) ) {
+			$_POST['input_6'] = '13';
+		}
+	}
+	return $form;
+}
 
 add_action( 'gform_after_submission_3', 'acf_post_submission', 10, 2 );
 function acf_post_submission( $entry, $form ) {
