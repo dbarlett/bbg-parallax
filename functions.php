@@ -16,7 +16,7 @@ function custom_enqueue_scripts() {
 }
 
 /**
- * Limit entries for form #3
+ * Limit entries for form #3 (Total Wellness Challenge Points Log1)
  * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_pre_render/
  * @author Dylan Barlett <dylan.barlett@gmail.com>
  */
@@ -87,7 +87,7 @@ function bbg_gform_pre_render_3( $form ) {
 }
 
 /**
- * Validate field 2 on form #3
+ * Validate field 2 on form #3 (points date)
  * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_field_validation/
  * @author Dylan Barlett <dylan.barlett@gmail.com>
  */
