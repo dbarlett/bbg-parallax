@@ -15,27 +15,6 @@ function custom_enqueue_scripts() {
 	wp_enqueue_style( 'themify-media-queries', get_stylesheet_directory_uri() . '/media-queries.css' );
 }
 
-add_action( 'gform_after_submission_3', 'acf_post_submission', 10, 2 );
-function acf_post_submission( $entry, $form ) {
-	$field_key = 'field_54817fefd7196';
-	$user_id = 'user_' . get_current_user_id();
-	$value = array();
-	$value[] = get_field( $field_key, $user_id );
-	// fix the date format, no hyphen!
-	foreach ( $value as $key => &$val ) {
-		$val['date'] = str_replace( '-', '', $val['date'] );
-	}
-	$value[] = array(
-		'date'                          => date( 'Ymd', strtotime( $entry[2] ) ),
-		'total_nutrition_points_earned' => $entry[6],
-		'total_fitness_points_earned'   => $entry[7],
-		'total_wellness_points_earned'  => $entry[8],
-	);
-	// print_r($value); die;
-	error_log( print_r( $value, 1 ), 3, '/tmp/my-errors.log' );
-	update_field( $field_key, $value, $user_id );
-}
-
 /**
  * Limit entries for form #3
  * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_pre_render/
@@ -138,4 +117,24 @@ function bbg_validate_points_date_3_2( $result, $value, $form, $field ) {
 		}
 	}
 	return $result;
+
+add_action( 'gform_after_submission_3', 'acf_post_submission', 10, 2 );
+function acf_post_submission( $entry, $form ) {
+	$field_key = 'field_54817fefd7196';
+	$user_id = 'user_' . get_current_user_id();
+	$value = array();
+	$value[] = get_field( $field_key, $user_id );
+	// fix the date format, no hyphen!
+	foreach ( $value as $key => &$val ) {
+		$val['date'] = str_replace( '-', '', $val['date'] );
+	}
+	$value[] = array(
+		'date'                          => date( 'Ymd', strtotime( $entry[2] ) ),
+		'total_nutrition_points_earned' => $entry[6],
+		'total_fitness_points_earned'   => $entry[7],
+		'total_wellness_points_earned'  => $entry[8],
+	);
+	// print_r($value); die;
+	error_log( print_r( $value, 1 ), 3, '/tmp/my-errors.log' );
+	update_field( $field_key, $value, $user_id );
 }
