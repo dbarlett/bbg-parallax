@@ -46,27 +46,24 @@ function bbg_gform_pre_render_3( $form ) {
 			$entry_for = $current_timestamp;
 			$description = 'Enter points for today (%s)';
 		}
-		// Find existing active entries by the current user for the current time period
-		$search_criteria = array(
-			'status'		=> 'active',
-			'field_filters' => array(
-				'mode' => 'all',
-				array(
-					'key'   => 'created_by',
-					'value'	=> get_current_user_id(),
-				),
-				array(
-					'key'      => '2',
-					'operator' => 'is',
-					'value'	   => date( 'Y-m-d', $entry_for ),
-				),
-			),
-		);
-		$entries = GFAPI::get_entries( 3, $search_criteria );
-		if ( ! is_wp_error( $entries ) && ( count( $entries ) > 0 ) ) {
+
+		// Find existing points for the current time period
+		$duplicate_entry = false;
+		$entry_for_ymd = date( 'Y-m-d', $entry_for );
+		$acf_user_id = 'user_' . get_current_user_id();
+		if ( has_sub_field( 'points', $acf_user_id ) ) {
+			while ( has_sub_field( 'points', $acf_user_id ) ) {
+				if ( get_sub_field( 'date' ) == $entry_for_ymd ) {
+					$duplicate_entry = true;
+					break;
+				}
+			}
+		}
+
+		if ( $duplicate_entry ) {
 			// Close form as if the total entry limit had been reached
 			$form['limitEntries']        = true;
-			$form['limitEntriesCount']   = 1;
+			$form['limitEntriesCount']   = 0;
 			$form['limitEntriesMessage'] = sprintf(
 				'You have already entered points for %s.',
 				date( 'l n/j', $entry_for )
@@ -94,24 +91,20 @@ function bbg_gform_pre_render_3( $form ) {
 add_filter( 'gform_field_validation_3_2', 'bbg_validate_points_date_3_2', 10, 4 );
 function bbg_validate_points_date_3_2( $result, $value, $form, $field ) {
 	if ( $result['is_valid'] ) {
-		// Find existing active entries by the current user for the submitted date
-		$search_criteria = array(
-			'status'        => 'active',
-			'field_filters' => array(
-				'mode' => 'all',
-				array(
-					'key'      => 'created_by',
-					'value'	   => get_current_user_id(),
-				),
-				array(
-					'key'      => '2',
-					'operator' => 'is',
-					'value'	   => $value,
-				),
-			),
-		);
-		$entries = GFAPI::get_entries( 3, $search_criteria );
-		if ( ! is_wp_error( $entries ) && ( count( $entries ) > 0 ) ) {
+		// Find existing points for the current time period
+		$duplicate_entry = false;
+		$entry_for_ymd = date( 'Y-m-d', $entry_for );
+		$acf_user_id = 'user_' . get_current_user_id();
+		if ( has_sub_field( 'points', $acf_user_id ) ) {
+			while ( has_sub_field( 'points', $acf_user_id ) ) {
+				if ( get_sub_field( 'date' ) == $entry_for_ymd ) {
+					$duplicate_entry = true;
+					break;
+				}
+			}
+		}
+
+		if ( $duplicate_entry ) {
 			$result['is_valid'] = false;
 			$result['message']  = 'You have already entered points for this day.';
 		}
