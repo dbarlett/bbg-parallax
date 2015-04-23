@@ -119,64 +119,42 @@ function bbg_gform_pre_submission_3( $form ) {
 	// Field 6 (Nutrition Points)
 	if ( 12 == rgpost( 'input_6' ) ) {
 		$points_date = rgpost( 'input_2' ); // Y-m-d
-		$last_four_days = array();
+		$last_four_days_points = 0;
 		for ( $i = 1; $i <= 4; $i++ ) {
 			$past_date = new DateTime( $points_date );
-			$last_four_days[] = $past_date->sub( new DateInterval( 'P' . $i . 'D' ) )->format( 'Y-m-d' );
+			$past_date->sub( new DateInterval( 'P' . $i . 'D' ) );
+			$last_four_days_points += bbg_current_user_nutrition_points( $past_date->format( 'Y-m-d' ) );
 		}
-		$search_criteria = array(
-			'status'		=> 'active',
-			'field_filters' => array(
-				'mode' => 'all',
-				array(
-					'key'   => 'created_by',
-					'value'	=> get_current_user_id(),
-				),
-				array(
-					'key'      => '2', // points date (Y-m-d)
-					'operator' => 'in',
-					'value'	   => $last_four_days,
-				),
-				array(
-					'key'      => '6', // nutrition points
-					'operator' => 'is',
-					'value'	   => '12',
-				),
-			),
-		);
-		$sorting = array(
-			'key'       => '2', // points date (Y-m-d)
-			'direction' => 'DESC',
-		);
-		$paging = array(
-			'offset'    => 0,
-			'page_size' => 4,
-		);
-		$entries = GFAPI::get_entries( 3, $search_criteria, $sorting, $paging );
-		if ( ! is_wp_error( $entries ) && ( 4 == count( $entries ) ) ) {
+		if ( 48 == $last_four_days_points ) { // 4 days of exactly 12 points
 			$_POST['input_6'] = '13';
+			$form['confirmation']['message'] = 'Congratulations, you earned a bonus nutrition point!';
 		}
 	}
 	return $form;
 }
 
+/**
+ * Store points in ACF repeater
+ * @link http://www.advancedcustomfields.com/resources/update_field/
+ * @author Unknown
+ * @author Dylan Barlett <dylan.barlett@gmail.com>
+ */
 add_action( 'gform_after_submission_3', 'acf_post_submission', 10, 2 );
 function acf_post_submission( $entry, $form ) {
 	$field_key = 'field_54817fefd7196';
-	$user_id = 'user_' . get_current_user_id();
-	$value = array();
-	$value[] = get_field( $field_key, $user_id );
+	$acf_user_id = 'user_' . get_current_user_id();
+	$value = get_field( $field_key, $acf_user_id );
 	// fix the date format, no hyphen!
 	foreach ( $value as $key => &$val ) {
 		$val['date'] = str_replace( '-', '', $val['date'] );
 	}
 	$value[] = array(
-		'date'                          => date( 'Ymd', strtotime( $entry[2] ) ),
+		'date'                          => str_replace( '-', '', $entry[2] ),
 		'total_nutrition_points_earned' => $entry[6],
 		'total_fitness_points_earned'   => $entry[7],
 		'total_wellness_points_earned'  => $entry[8],
 	);
 	// print_r($value); die;
 	error_log( print_r( $value, 1 ), 3, '/tmp/my-errors.log' );
-	update_field( $field_key, $value, $user_id );
+	update_field( $field_key, $value, $acf_user_id );
 }
