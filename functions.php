@@ -16,6 +16,27 @@ function custom_enqueue_scripts() {
 }
 
 /**
+ * Return current user's nutrition points for a given date
+ * @link http://www.advancedcustomfields.com/resources/has_sub_field/
+ * @author Dylan Barlett <dylan.barlett@gmail.com>
+ * @param string $date_ymd Y-m-d
+ * @return int points, or -1 if no entry for given date
+ */
+function bbg_current_user_nutrition_points( $date_ymd ) {
+	$acf_user_id = 'user_' . get_current_user_id();
+	$points = -1;
+	if ( get_field( 'points', $acf_user_id ) ) {
+		while ( has_sub_field( 'points', $acf_user_id ) ) {
+			if ( get_sub_field( 'date' ) == $date_ymd ) {
+				$points = get_sub_field( 'total_nutrition_points_earned' );
+				// Don't break out of loop or return here (ACF loop state)
+			}
+		}
+	}
+	return $points;
+}
+
+/**
  * Limit entries for form #3 (Total Wellness Challenge Points Log1)
  * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_pre_render/
  * @author Dylan Barlett <dylan.barlett@gmail.com>
@@ -48,19 +69,7 @@ function bbg_gform_pre_render_3( $form ) {
 		}
 
 		// Find existing points for the current time period
-		$duplicate_entry = false;
-		$entry_for_ymd = date( 'Y-m-d', $entry_for );
-		$acf_user_id = 'user_' . get_current_user_id();
-		if ( has_sub_field( 'points', $acf_user_id ) ) {
-			while ( has_sub_field( 'points', $acf_user_id ) ) {
-				if ( get_sub_field( 'date' ) == $entry_for_ymd ) {
-					$duplicate_entry = true;
-					break;
-				}
-			}
-		}
-
-		if ( $duplicate_entry ) {
+		if ( -1 != bbg_current_user_nutrition_points( date( 'Y-m-d', $entry_for ) ) ) {
 			// Close form as if the total entry limit had been reached
 			$form['limitEntries']        = true;
 			$form['limitEntriesCount']   = 0;
@@ -88,23 +97,11 @@ function bbg_gform_pre_render_3( $form ) {
  * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_field_validation/
  * @author Dylan Barlett <dylan.barlett@gmail.com>
  */
-add_filter( 'gform_field_validation_3_2', 'bbg_validate_points_date_3_2', 10, 4 );
+//add_filter( 'gform_field_validation_3_2', 'bbg_validate_points_date_3_2', 10, 4 );
 function bbg_validate_points_date_3_2( $result, $value, $form, $field ) {
 	if ( $result['is_valid'] ) {
 		// Find existing points for the current time period
-		$duplicate_entry = false;
-		$entry_for_ymd = date( 'Y-m-d', $entry_for );
-		$acf_user_id = 'user_' . get_current_user_id();
-		if ( has_sub_field( 'points', $acf_user_id ) ) {
-			while ( has_sub_field( 'points', $acf_user_id ) ) {
-				if ( get_sub_field( 'date' ) == $entry_for_ymd ) {
-					$duplicate_entry = true;
-					break;
-				}
-			}
-		}
-
-		if ( $duplicate_entry ) {
+		if ( -1 != bbg_current_user_nutrition_points( $value ) ) {
 			$result['is_valid'] = false;
 			$result['message']  = 'You have already entered points for this day.';
 		}
