@@ -143,6 +143,9 @@ function acf_post_submission( $entry, $form ) {
 	$field_key = 'field_54817fefd7196';
 	$acf_user_id = 'user_' . get_current_user_id();
 	$value = get_field( $field_key, $acf_user_id, false );
+	if ( ! is_array( $value ) ) {
+		$value = array();
+	}
 	$value[] = array(
 		'date'                          => str_replace( '-', '', $entry[2] ),
 		'total_nutrition_points_earned' => $entry[6],
