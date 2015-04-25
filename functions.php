@@ -127,7 +127,6 @@ function bbg_gform_pre_submission_3( $form ) {
 		}
 		if ( 48 == $last_four_days_points ) { // 4 days of exactly 12 points
 			$_POST['input_6'] = '13';
-			$form['confirmation']['message'] = 'Congratulations, you earned a bonus nutrition point!';
 		}
 	}
 	return $form;
