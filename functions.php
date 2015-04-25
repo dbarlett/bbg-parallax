@@ -29,7 +29,7 @@ function bbg_current_user_nutrition_points( $date_ymd ) {
 		while ( has_sub_field( 'points', $acf_user_id ) ) {
 			if ( get_sub_field( 'date' ) == $date_ymd ) {
 				$points = get_sub_field( 'total_nutrition_points_earned' );
-				// Don't break out of loop or return here (ACF loop state)
+				// Don't break out of loop or return here (ACF keeps loop state)
 			}
 		}
 	}
