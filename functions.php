@@ -110,7 +110,7 @@ function bbg_validate_points_date_3_2( $result, $value, $form, $field ) {
 }
 
 /**
- * Award bonus points for Total Wellness Challenge (form #3)
+ * Award bonus points for form #3 (Total Wellness Challenge Points Log1)
  * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/actions/gform_pre_submission/
  * @author Dylan Barlett <dylan.barlett@gmail.com>
  */
