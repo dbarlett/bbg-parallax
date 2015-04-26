@@ -97,7 +97,7 @@ function bbg_gform_pre_render_3( $form ) {
  * @link http://www.gravityhelp.com/documentation/gravity-forms/extending-gravity-forms/hooks/filters/gform_field_validation/
  * @author Dylan Barlett <dylan.barlett@gmail.com>
  */
-//add_filter( 'gform_field_validation_3_2', 'bbg_validate_points_date_3_2', 10, 4 );
+add_filter( 'gform_field_validation_3_2', 'bbg_validate_points_date_3_2', 10, 4 );
 function bbg_validate_points_date_3_2( $result, $value, $form, $field ) {
 	if ( $result['is_valid'] ) {
 		// Find existing points for the current time period
